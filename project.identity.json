@@ -4,7 +4,7 @@
   "project": {
     "name": "AV Sarees",
     "slug": "av-sarees",
-    "repo": "geethasarees15-ops/AV-Sarees",
+    "repo": "priyasareesonline-create/AV-Sarees",
     "branch": "main"
   },
   "site": {
@@ -87,15 +87,18 @@
     }
   },
   "vercel": {
-    "teamSlug": "av-sarees",
+    "teamSlug": "thryco",
+    "teamId": "team_DAup0iV9bvGvaL1mIGH9a7al",
     "projectSlug": "av-sarees",
-    "productionHost": "localhost:3000"
+    "projectId": "prj_td1yNsi6WW5aEdXDZxet1Nio8Y2J",
+    "productionHost": "av-sarees.vercel.app"
   },
   "github": {
-    "owner": "geethasarees15-ops",
+    "owner": "priyasareesonline-create",
     "repo": "AV-Sarees",
-    "pushAccount": "geethasarees15-ops",
-    "htmlUrl": "https://github.com/geethasarees15-ops/AV-Sarees"
+    "pushAccount": "priyasareesonline-create",
+    "htmlUrl": "https://github.com/priyasareesonline-create/AV-Sarees",
+    "note": "Gabe MCP also created geethasarees15-ops/AV-Sarees (empty). Active push via gh priyasareesonline-create."
   },
   "upstash": {
     "redisRestUrl": "",
@@ -157,10 +160,14 @@
   },
   "notes": [
     "AV Sarees is a NEW shop. Secrets stay in .env.local \u2014 never commit them.",
-    "Launch track: free (Priya / Vercel). No paid Cloudflare Workers path.",
     "Run Ship validate agent before auth, R2, wrangler, or deploy work.",
     "Bria: strip template identity \u2192 AV Sarees; address + logo + theme from logo.",
-    "Bria: strip template identity \u2192 AV Sarees; address + logo + theme from logo."
+    "Bria: strip template identity \u2192 AV Sarees; address + logo + theme from logo.",
+    "Ori SSO completed for avsareesav@gmail.com (fresh Chrome profile).",
+    "Lex mcp_live: cloudflare, github, vercel, supabase, upstash, resend.",
+    "Bria: logo installed, primary #F09000, address/phones rewritten.",
+    "Vera: Vercel project av-sarees created on thryco (Hobby). Git link pending.",
+    "Suri/Uri/Remy: shop-owned resources pending under Ori Google account (do not reuse THRY supabase refs)."
   ],
   "$schema": "./project.identity.schema.json",
   "workspace": {
