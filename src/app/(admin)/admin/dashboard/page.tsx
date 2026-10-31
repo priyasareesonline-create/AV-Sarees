@@ -11,7 +11,7 @@ import { Suspense } from "react";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Dashboard | Priya Admin",
+  title: "Dashboard | AV Admin",
   description: "Store overview, analytics, reports and notifications",
 };
 

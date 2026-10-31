@@ -1,7 +1,7 @@
 /**
  * Enable Cloudflare proxy (orange cloud) in front of Vercel + tune cache/SSL.
  *
- * Requires CLOUDFLARE_API_TOKEN with Zone DNS Edit on priyasaree.com.
+ * Requires CLOUDFLARE_API_TOKEN with Zone DNS Edit on localhost:3000.
  * Usage: node --env-file=.env.local scripts/setup-cf-proxy-cache.mjs
  *
  * Architecture (industry-standard Vercel + Cloudflare):

@@ -43,7 +43,7 @@ describe("cdn-image", () => {
     );
     expect(
       extractMediaObjectKey(
-        "https://priyasaree.com/api/r2/uploads/foo%2Fbar.webp",
+        "https://localhost:3000/api/r2/uploads/foo%2Fbar.webp",
       ),
     ).toBe("uploads/foo/bar.webp");
   });

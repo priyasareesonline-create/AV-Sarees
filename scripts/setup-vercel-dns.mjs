@@ -1,5 +1,5 @@
 /**
- * Point Cloudflare DNS for priyasaree.com at Vercel (DNS-only, not proxied).
+ * Point Cloudflare DNS for localhost:3000 at Vercel (DNS-only, not proxied).
  *
  * Requires CLOUDFLARE_API_TOKEN with Zone → DNS → Edit on the Priya zone.
  * Usage: node --env-file=.env.local scripts/setup-vercel-dns.mjs
@@ -128,7 +128,7 @@ async function main() {
   }
 
   console.log("\nDNS ready for Vercel. Next:");
-  console.log("  1. Vercel project → Domains → add priyasaree.com + www");
+  console.log("  1. Vercel project → Domains → add localhost:3000 + www");
   console.log("  2. npm run auth:setup");
   console.log("  3. Redeploy so NEXT_PUBLIC_SITE_URL is baked in");
 }

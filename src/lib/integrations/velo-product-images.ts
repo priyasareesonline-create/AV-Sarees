@@ -10,7 +10,7 @@ function isHttpUrl(value: string): boolean {
 
 /**
  * Velosoft runs off-origin; relative `/api/r2/...` paths must become
- * https://priyasaree.com/api/r2/... (or the configured canonical origin).
+ * https://localhost:3000/api/r2/... (or the configured canonical origin).
  * Never send the storefront SVG fallback as a product photo.
  */
 export function toAbsoluteVeloImageUrl(

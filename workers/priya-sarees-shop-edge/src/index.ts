@@ -7,7 +7,7 @@
  * - Bypass when Supabase auth cookies or Authorization are present
  * - Never store responses that Set-Cookie
  *
- * X-Priya-Cache: HIT | MISS | BYPASS
+ * X-AV-Cache: HIT | MISS | BYPASS
  */
 const ORIGIN = "https://priya-sarees.vercel.app";
 
@@ -223,7 +223,7 @@ function resolveEdgeTtl(pathname: string, cacheControl: string | null): number {
 
 function withCacheHeader(response: Response, value: string): Response {
   const headers = new Headers(response.headers);
-  headers.set("X-Priya-Cache", value);
+  headers.set("X-AV-Cache", value);
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,
@@ -314,7 +314,7 @@ async function handleCachedGet(
     "Cache-Control",
     `public, s-maxage=${sMaxAge}, stale-while-revalidate=${sMaxAge * 2}`,
   );
-  storeHeaders.set("X-Priya-Cache", "MISS");
+  storeHeaders.set("X-AV-Cache", "MISS");
 
   const toStore = new Response(bodyText, {
     status: upstream.status,

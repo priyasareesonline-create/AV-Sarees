@@ -11,7 +11,7 @@ describe("image-optimization bypass", () => {
   it("detects app R2 proxy sources", () => {
     expect(isAppR2ProxySrc("/api/r2/uploads/foo.webp")).toBe(true);
     expect(
-      isAppR2ProxySrc("https://priyasaree.com/api/r2/uploads/foo.webp"),
+      isAppR2ProxySrc("https://localhost:3000/api/r2/uploads/foo.webp"),
     ).toBe(true);
     expect(isAppR2ProxySrc("/images/av-sarees-logo.png")).toBe(false);
   });

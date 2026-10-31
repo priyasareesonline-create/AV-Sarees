@@ -42,7 +42,7 @@ One-time manual steps the API cannot do:
 2. Cloudflare dashboard → **Workers & Pages → Plans → Workers Paid** ($5/mo). The OpenNext bundle is
    ~4.5 MiB gzipped; the Free plan rejects Workers above 3 MiB. (`npm run cf:dry-run` prints the size.)
 3. Supabase dashboard → Settings → API: copy **anon** + **service_role** into `.env.local`.
-4. Set `NEXT_PUBLIC_SITE_URL=https://priyasaree.com` before a production build
+4. Set `NEXT_PUBLIC_SITE_URL=https://localhost:3000` before a production build
    (client bundle bakes it in). Keep Workers URL in `authRedirectOrigins` for later cutover.
 
 Why not Cloudflare Pages: this app uses Server Actions, ISR with an R2 incremental
@@ -58,11 +58,11 @@ Pages only for *static-export* Next.js and routes full-stack Next.js to Workers.
 
 ## Hosting: Vercel now, Cloudflare Workers later
 
-**Canonical domain:** `https://priyasaree.com` (DNS zone on Priya Cloudflare account).
+**Canonical domain:** `https://localhost:3000` (DNS zone on Priya Cloudflare account).
 
 ### Validated vs THRY
 
-| | **THRY (`thryco.com`)** | **Priya now (`priyasaree.com`)** |
+| | **THRY (`thryco.com`)** | **Priya now (`localhost:3000`)** |
 |--|-------------------------|----------------------------------|
 | App host | Cloudflare **Workers** | **Vercel** |
 | DNS | Cloudflare, **proxied (orange)** OK | Cloudflare DNS; keep apex/www pointing at Vercel |
@@ -73,19 +73,19 @@ Pages only for *static-export* Next.js and routes full-stack Next.js to Workers.
 ### Robust production shape (now)
 
 1. **Vercel** serves the Next.js shop (Hobby OK with daily crons).
-2. **Cloudflare** holds the zone for `priyasaree.com`.
+2. **Cloudflare** holds the zone for `localhost:3000`.
 3. DNS records (external DNS provider = Cloudflare):
    - `A @ → 76.76.21.21` (Vercel apex)
    - `A www → 76.76.21.21` *or* `CNAME www → cname.vercel-dns.com`
    - Prefer **DNS only (grey)** until SSL is issued; after Vercel cert exists, orange + **SSL Full** can work (traffic still hits Vercel on cache miss).
-4. Issue/renew certs: `npx vercel certs issue priyasaree.com www.priyasaree.com`
-5. `NEXT_PUBLIC_SITE_URL=https://priyasaree.com` + Supabase auth URLs for apex/www/vercel.app/workers.dev.
+4. Issue/renew certs: `npx vercel certs issue localhost:3000 www.localhost:3000`
+5. `NEXT_PUBLIC_SITE_URL=https://localhost:3000` + Supabase auth URLs for apex/www/vercel.app/workers.dev.
 
 ### Cloudflare cache in front of Vercel (optional)
 
 Industry pattern: **Browser → Cloudflare cache/WAF → Vercel**.
 
-1. Vercel SSL certs must exist (`npx vercel certs issue priyasaree.com www.priyasaree.com`).
+1. Vercel SSL certs must exist (`npx vercel certs issue localhost:3000 www.localhost:3000`).
 2. Cloudflare SSL = **Full**, Always HTTPS = **on**.
 3. DNS `@` + `www` = **A 76.76.21.21** with **Proxied (orange)**.
 4. Run: `npm run dns:cf-proxy` (needs Zone DNS Edit token) — sets proxy + cache-friendly settings.
@@ -97,14 +97,14 @@ If orange is on before certs → Error **525**. Grey first, issue certs, then or
 |-----|---------------------------|
 | App on **Vercel** | Same repo → `npm run deploy` (Workers / OpenNext) |
 | DNS at Cloudflare → Vercel (`scripts/setup-vercel-dns.mjs`, `proxied: false`) | Worker custom domain; orange OK |
-| Site URL stays `https://priyasaree.com` | Same URL |
+| Site URL stays `https://localhost:3000` | Same URL |
 
 ```bash
 # After Priya Vercel project exists + token can edit DNS:
 node --env-file=.env.local scripts/setup-vercel-dns.mjs
-npx vercel certs issue priyasaree.com www.priyasaree.com
+npx vercel certs issue localhost:3000 www.localhost:3000
 npm run auth:setup
 ```
 
-Set `NEXT_PUBLIC_SITE_URL=https://priyasaree.com` before a production build
+Set `NEXT_PUBLIC_SITE_URL=https://localhost:3000` before a production build
 (client bundle bakes it in).

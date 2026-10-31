@@ -956,7 +956,7 @@ export async function downloadOrderPdf(order: PdfLabelOrder) {
     );
     drawSectionBorder(d, 0, { solidBottom: true });
     drawOrderLabel(d, order, 0, renderOptions, resolved);
-    const filename = buildTimestampedFilename("Priya_Order");
+    const filename = buildTimestampedFilename("AV_Order");
     console.log(`[PDF] Generating blob for filename: ${filename}`);
     const blob = doc.output("blob");
     console.log(`[PDF] Blob generated, size: ${blob.size} bytes`);
@@ -1022,7 +1022,7 @@ export async function downloadOrdersPdf(orders: PdfLabelOrder[]) {
       }
     }
 
-    const filename = buildTimestampedFilename("Priya_Orders");
+    const filename = buildTimestampedFilename("AV_Orders");
     console.log(`[PDF] Generating blob for filename: ${filename}`);
     const blob = doc.output("blob");
     console.log(

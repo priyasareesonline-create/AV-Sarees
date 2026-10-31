@@ -67,7 +67,7 @@ if (!user) {
     email,
     password,
     email_confirm: true,
-    user_metadata: { name: "Priya Admin" },
+    user_metadata: { name: "AV Admin" },
     app_metadata: { isAdmin: true },
   });
   if (error) {
@@ -80,7 +80,7 @@ if (!user) {
   const { error } = await supabase.auth.admin.updateUserById(user.id, {
     password,
     email_confirm: true,
-    user_metadata: { ...user.user_metadata, name: "Priya Admin" },
+    user_metadata: { ...user.user_metadata, name: "AV Admin" },
     app_metadata: { ...user.app_metadata, isAdmin: true },
   });
   if (error) {
@@ -93,7 +93,7 @@ if (!user) {
 const { error: profileErr } = await supabase.from("profiles").upsert({
   id: user.id,
   email,
-  name: "Priya Admin",
+  name: "AV Admin",
   is_admin: true,
 });
 if (profileErr) {

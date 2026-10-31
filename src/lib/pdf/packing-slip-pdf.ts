@@ -360,7 +360,7 @@ export async function downloadOrderPdf(order: PackingSlipOrder) {
   const doc = new jsPDF({ unit: "mm", format: "a4" }) as unknown as Doc;
   await drawPackingSlip(doc, order, shopAddressLines);
   const blob = doc.output("blob");
-  forceDownloadPdf(blob, buildTimestampedFilename("PriyaSarees_Order"));
+  forceDownloadPdf(blob, buildTimestampedFilename("AV_Sarees_Order"));
 }
 
 export async function downloadOrdersPdf(orders: PackingSlipOrder[]) {
@@ -382,5 +382,5 @@ export async function downloadOrdersPdf(orders: PackingSlipOrder[]) {
     await drawPackingSlip(doc, orders[i], shopAddressLines);
   }
   const blob = doc.output("blob");
-  forceDownloadPdf(blob, buildTimestampedFilename("PriyaSarees_Orders"));
+  forceDownloadPdf(blob, buildTimestampedFilename("AV_Sarees_Orders"));
 }

@@ -2,7 +2,7 @@ import { STOREFRONT_IMAGE_FALLBACK } from "@/lib/utils";
 import { toAbsoluteVeloImageUrl } from "./velo-product-images";
 
 describe("toAbsoluteVeloImageUrl", () => {
-  const origin = "https://priyasaree.com";
+  const origin = "https://localhost:3000";
 
   it("returns absolute https URLs unchanged", () => {
     expect(
@@ -13,7 +13,7 @@ describe("toAbsoluteVeloImageUrl", () => {
   it("prefixes relative /api/r2 paths with Priya canonical origin", () => {
     expect(
       toAbsoluteVeloImageUrl("/api/r2/uploads/upload-abc.webp", origin),
-    ).toBe("https://priyasaree.com/api/r2/uploads/upload-abc.webp");
+    ).toBe("https://localhost:3000/api/r2/uploads/upload-abc.webp");
   });
 
   it("rejects empty and storefront fallback SVG", () => {

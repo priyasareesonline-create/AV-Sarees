@@ -58,3 +58,6 @@ next-env.d.ts
 .wrangler-dry/
 .env.local.bak-migrate
 scripts/.priya-sarees-r2-secrets.local.json
+
+.ship/
+

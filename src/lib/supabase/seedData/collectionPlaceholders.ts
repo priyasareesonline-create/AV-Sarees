@@ -1,6 +1,6 @@
 /** Neutral placeholders for empty/new AV Sarees catalogs (no Hub/Sakthi assets). */
 export const SAKTHI_MEDIA_BASE =
-  "https://placehold.co/600x800/png?text=Priya+Sarees+";
+  "https://placehold.co/600x800/png?text=AV+Sarees+";
 
 export const SAREE_SHOP_MODEL_IMAGES = [
   `${SAKTHI_MEDIA_BASE}1`,

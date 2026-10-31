@@ -129,7 +129,7 @@ export function FloatingMailPicker({
             aria-label={`Copy ${email}`}
           >
             <span className="block truncate text-xs font-semibold text-foreground">
-              {copied ? "Copied" : "Email Priya"}
+              {copied ? "Copied" : "Email AV Sarees"}
             </span>
             <span className="block truncate text-sm font-medium text-primary">
               {email}
