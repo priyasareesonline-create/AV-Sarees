@@ -1,0 +1,117 @@
+name: Keep storefront warm
+
+# Schedules removed after Vercel migration — run manually via workflow_dispatch if needed.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: keep-storefront-warm
+  cancel-in-progress: true
+
+jobs:
+  warm-and-check:
+    name: Warm and verify production
+    runs-on: ubuntu-latest
+    timeout-minutes: 4
+
+    steps:
+      - name: Warm public routes
+        shell: bash
+        env:
+          SITE_ORIGIN: http://localhost:3000
+        run: |
+          set -euo pipefail
+
+          check_route() {
+            local path="$1"
+            local expected_body="${2:-}"
+            local body
+            local metadata
+            local status
+            local final_url
+
+            body="$(mktemp)"
+            metadata="$(
+              curl \
+                --fail-with-body \
+                --location \
+                --silent \
+                --show-error \
+                --connect-timeout 10 \
+                --max-time 45 \
+                --retry 3 \
+                --retry-delay 2 \
+                --retry-max-time 150 \
+                --retry-all-errors \
+                --user-agent "HubOfCraftss-Production-Warmup/1.0" \
+                --output "$body" \
+                --write-out "%{http_code} %{url_effective}" \
+                "${SITE_ORIGIN}${path}"
+            )"
+
+            status="${metadata%% *}"
+            final_url="${metadata#* }"
+
+            if [[ "$status" != "200" ]]; then
+              echo "::error title=Unexpected HTTP status::${path} returned ${status}"
+              cat "$body"
+              rm -f "$body"
+              return 1
+            fi
+
+            if [[ "$final_url" != "${SITE_ORIGIN}"* ]]; then
+              echo "::error title=Unexpected final domain::${path} ended at ${final_url}"
+              rm -f "$body"
+              return 1
+            fi
+
+            if [[ -n "$expected_body" ]] && ! grep -Fq "$expected_body" "$body"; then
+              echo "::error title=Health response mismatch::${path} did not contain ${expected_body}"
+              rm -f "$body"
+              return 1
+            fi
+
+            echo "OK ${status} ${final_url}"
+            rm -f "$body"
+          }
+
+          # Exercise both the lightweight API runtime and important rendered routes.
+          check_route "/api/health" '"status":"ok"'
+          check_route "/"
+          check_route "/shop"
+
+      - name: Release expired stock reservations
+        shell: bash
+        env:
+          SITE_ORIGIN: http://localhost:3000
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${CRON_SECRET}" ]]; then
+            echo "::notice title=Cron skipped::CRON_SECRET repo secret is not set; expired stock holds rely on the lazy in-request sweep only."
+            exit 0
+          fi
+
+          response="$(
+            curl \
+              --fail-with-body \
+              --silent \
+              --show-error \
+              --connect-timeout 10 \
+              --max-time 60 \
+              --retry 2 \
+              --retry-delay 3 \
+              --header "Authorization: Bearer ${CRON_SECRET}" \
+              --user-agent "HubOfCraftss-Production-Warmup/1.0" \
+              "${SITE_ORIGIN}/api/cron/release-expired-stock-reservations"
+          )"
+
+          echo "${response}"
+          if ! grep -Fq '"ok":true' <<<"${response}"; then
+            echo "::error title=Stock release failed::${response}"
+            exit 1
+          fi

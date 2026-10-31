@@ -1,0 +1,23 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "av-sarees-media",
+  "account_id": "2294e12a37c66f58321581561fa758ee",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-14",
+  "workers_dev": true,
+  "images": {
+    "binding": "IMAGES"
+  },
+  "r2_buckets": [
+    {
+      "binding": "MEDIA_BUCKET",
+      "bucket_name": "av-sarees-cdn"
+    }
+  ],
+  "secrets": {
+    "required": ["MEDIA_PROXY_SECRET"]
+  },
+  "observability": {
+    "enabled": true
+  }
+}

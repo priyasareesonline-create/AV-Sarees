@@ -1,0 +1,227 @@
+import { Shell } from "@/components/layouts/Shell";
+import { Icons } from "@/components/layouts/icons";
+import {
+  HomeHeroCarousel,
+  HomeCategoriesCarousel,
+  HomeExploreLinks,
+} from "@/features/storefront/components";
+import dynamic from "next/dynamic";
+import { heroSlides } from "@/config/heroSlides";
+import { getHomeBannerSlidesCached } from "@/lib/integrations/settings";
+import { withTimeoutFallback } from "@/lib/resilience";
+import { getDraftProductIdsSafe } from "@/lib/storefront/draft-product-ids";
+import { getLandingPageDataCached } from "@/lib/storefront/landing-data";
+import { getShopByPriceBucketsCached } from "@/lib/storefront/shop-by-price";
+import { getProductPackLabelsByIds } from "@/lib/products/pack.server";
+import { siteConfig } from "@/config/site";
+import { cn } from "@/lib/utils";
+import { CDN_PRESETS, cdnImageUrl } from "@/lib/media/cdn-image";
+import { buildSocialImages } from "@/lib/seo/social-image";
+import { ORDER_RETURNS } from "@/lib/storefront/order-shipping";
+import type { Metadata } from "next";
+
+const HomePriceCarousel = dynamic(() =>
+  import("@/features/storefront/components/HomePriceCarousel").then(
+    (mod) => mod.HomePriceCarousel,
+  ),
+);
+const HomeShoppableReels = dynamic(() =>
+  import("@/features/storefront/components/HomeShoppableReels").then(
+    (mod) => mod.HomeShoppableReels,
+  ),
+);
+const HomeTestimonialsCarousel = dynamic(() =>
+  import("@/features/storefront/components/HomeTestimonialsCarousel").then(
+    (mod) => mod.HomeTestimonialsCarousel,
+  ),
+);
+
+export const revalidate = 120;
+
+const homeSocial = buildSocialImages(null, "AV Sarees");
+
+export const metadata: Metadata = {
+  title: "Silk, cotton & wedding sarees",
+  description:
+    "Shop silk, cotton, wedding and festive sarees at AV Sarees — secure checkout and delivery across India.",
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "AV Sarees | Silk, cotton & wedding sarees",
+    description:
+      "Shop silk, cotton, wedding and festive sarees at AV Sarees.",
+    url: "/",
+    ...homeSocial.openGraph,
+  },
+  twitter: {
+    ...homeSocial.twitter,
+    title: "AV Sarees | Silk, cotton & wedding sarees",
+    description:
+      "Shop silk, cotton, wedding and festive sarees at AV Sarees.",
+  },
+};
+
+const SECTION_TIMEOUT_MS = 5000;
+
+export default async function Home() {
+  const [homeBannerSlides, data, draftProductIds, priceBuckets] =
+    await Promise.all([
+      withTimeoutFallback(
+        "home:banner",
+        getHomeBannerSlidesCached(),
+        SECTION_TIMEOUT_MS,
+        null,
+      ),
+      withTimeoutFallback(
+        "home:landing",
+        getLandingPageDataCached(),
+        SECTION_TIMEOUT_MS,
+        null,
+      ),
+      withTimeoutFallback<string[] | null>(
+        "home:drafts",
+        getDraftProductIdsSafe(),
+        SECTION_TIMEOUT_MS,
+        null,
+      ),
+      withTimeoutFallback<
+        Awaited<ReturnType<typeof getShopByPriceBucketsCached>>
+      >(
+        "home:priceBuckets",
+        getShopByPriceBucketsCached(),
+        SECTION_TIMEOUT_MS,
+        [],
+      ),
+    ]);
+
+  // Without the draft list we cannot prove a product is publishable, so the
+  // reels section stays empty rather than risking an unfinished listing.
+  const draftIds = draftProductIds === null ? null : new Set(draftProductIds);
+  const products = data?.products;
+  const featuredProducts =
+    draftIds === null
+      ? []
+      : products?.edges?.filter((edge) => !draftIds.has(edge.node.id)) ?? [];
+  const collectionScrollCards = data?.collectionScrollCards;
+  const homeTestimonials = data?.homeTestimonials;
+  const slides = homeBannerSlides?.length ? homeBannerSlides : heroSlides;
+
+  const featuredPackLabels = await getProductPackLabelsByIds(
+    featuredProducts.map(({ node }) => node.id),
+  );
+
+  const firstHeroImage = slides[0]?.image?.trim() || null;
+  const firstHeroImageSrc = firstHeroImage
+    ? cdnImageUrl(firstHeroImage, CDN_PRESETS.heroMobile)
+    : null;
+
+  return (
+    <main className="min-h-screen w-full min-w-0 overflow-x-hidden">
+      {firstHeroImageSrc ? (
+        <link
+          rel="preload"
+          as="image"
+          href={firstHeroImageSrc}
+          fetchPriority="high"
+        />
+      ) : null}
+      <HomeHeroCarousel slides={slides} />
+
+      <Shell>
+        {!data ? (
+          <div className="rounded-lg border border-amber-300 bg-amber-50 p-6 my-6 text-sm">
+            <p className="font-semibold mb-2">Store data not loaded</p>
+            <p className="text-muted-foreground mb-2">
+              Enable GraphQL in Supabase: SQL Editor → run{" "}
+              <code className="bg-card px-1">
+                supabase/02-enable-graphql.sql
+              </code>
+            </p>
+          </div>
+        ) : null}
+
+        {collectionScrollCards?.edges?.length ? (
+          <HomeCategoriesCarousel
+            initialEdges={collectionScrollCards.edges}
+            initialPageInfo={{
+              hasNextPage: Boolean(collectionScrollCards.pageInfo?.hasNextPage),
+              endCursor: collectionScrollCards.pageInfo?.endCursor ?? null,
+            }}
+          />
+        ) : null}
+
+        {priceBuckets.length ? (
+          <HomePriceCarousel buckets={priceBuckets} />
+        ) : null}
+
+        {featuredProducts.length ? (
+          <HomeShoppableReels
+            products={featuredProducts}
+            packLabels={featuredPackLabels}
+          />
+        ) : null}
+
+        {homeTestimonials?.edges?.length ? (
+          <HomeTestimonialsCarousel testimonials={homeTestimonials.edges} />
+        ) : null}
+
+        <HomeExploreLinks />
+        <TrustFeatures />
+      </Shell>
+    </main>
+  );
+}
+
+function TrustFeatures() {
+  const features = [
+    {
+      Icon: Icons.package,
+      title: "Affordable Shipping",
+      description: "Low delivery charges for orders across India.",
+      iconClass: "text-brand-rose",
+    },
+    {
+      Icon: Icons.cart,
+      title: "Contact Support",
+      description: siteConfig.email
+        ? `Email ${siteConfig.email} anytime.`
+        : "Email us anytime from the contact page.",
+      iconClass: "text-brand-gold",
+    },
+    {
+      Icon: Icons.tag,
+      title: ORDER_RETURNS.badgeTitle,
+      description: ORDER_RETURNS.badgeDescription,
+      iconClass: "text-brand-rose",
+    },
+    {
+      Icon: Icons.award,
+      title: "Secure Checkout",
+      description: "Safe, trusted payment flow.",
+      iconClass: "text-brand-gold",
+    },
+  ];
+
+  return (
+    <section className="craft-stitch grid grid-cols-2 gap-6 rounded-2xl border-brand-gold/30 bg-card/80 px-3 py-10 md:grid-cols-4 md:gap-10 md:px-6 md:py-16">
+      {features.map(({ Icon, title, description, iconClass }, index) => (
+        <div className="text-center px-2" key={`trust_${index}`}>
+          <div className="mb-3 flex justify-center">
+            <span
+              className={cn(
+                "inline-flex h-12 w-12 items-center justify-center rounded-full bg-card shadow-[0_8px_24px_-12px_rgba(155,27,46,0.35)] ring-1 ring-brand-rose/15",
+              )}
+            >
+              <Icon className={cn("h-6 w-6", iconClass)} />
+            </span>
+          </div>
+          <h4 className="text-sm md:text-base font-semibold mb-1">{title}</h4>
+          <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+            {description}
+          </p>
+        </div>
+      ))}
+    </section>
+  );
+}

@@ -1,0 +1,170 @@
+{
+  "version": 1,
+  "launch_track": "free",
+  "project": {
+    "name": "AV Sarees",
+    "slug": "av-sarees",
+    "repo": "geethasarees15-ops/AV-Sarees",
+    "branch": "main"
+  },
+  "site": {
+    "canonicalOrigin": "http://localhost:3000",
+    "wwwOrigin": "http://localhost:3000",
+    "apexDomain": "",
+    "localOrigins": [
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+      "http://localhost:3000"
+    ]
+  },
+  "domain": {
+    "apex": "",
+    "registrar": "cloudflare",
+    "status": "unset",
+    "years": 1,
+    "autoRenew": true,
+    "nameservers": [],
+    "orderId": ""
+  },
+  "supabase": {
+    "projectRef": "",
+    "url": "",
+    "regionHint": "ap-south-1"
+  },
+  "contacts": {
+    "gmail": "avsareesav@gmail.com",
+    "loginEmail": "avsareesav@gmail.com",
+    "mailAppPasswordSet": true
+  },
+  "brand": {
+    "displayName": "AV Sarees",
+    "tagline": "Your Style, Our Fabrics",
+    "email": "avsareesav@gmail.com",
+    "phone": "7200783646",
+    "address": "A. Arumugam\n5/400, Asari street\nK.k. nagar, Elampillai\nSalem 637502\nTamil Nadu, India",
+    "addressLines": [
+      "A. Arumugam",
+      "5/400, Asari street",
+      "K.k. nagar, Elampillai",
+      "Salem 637502",
+      "Tamil Nadu, India"
+    ],
+    "logoUrl": "",
+    "logoPath": "E:\\AV Sarees\\public\\brand\\logo.png",
+    "logoPublicPath": "/brand/logo.png",
+    "primaryHex": "#F09000",
+    "theme": {
+      "primary_hex": "#F09000",
+      "primary": "36 80% 42%",
+      "primary_deep": "36 100% 35%",
+      "primary_soft": "36 70% 96%",
+      "gold": "76 55% 48%",
+      "cream": "56 25% 97%",
+      "foreground": "36 15% 9%",
+      "background": "56 25% 97%",
+      "status": "derived",
+      "source": "primary_hex"
+    },
+    "codeConfig": "src/config/site.ts",
+    "stripTemplate": true,
+    "rewrittenAt": "2026-10-31T16:03:24Z",
+    "phones": [
+      "7200783646",
+      "8072034006"
+    ]
+  },
+  "cloudflare": {
+    "accountEmail": "avsareesav@gmail.com",
+    "accountId": "2294e12a37c66f58321581561fa758ee",
+    "workerName": "av-sarees",
+    "mediaWorkerName": "av-sarees-media",
+    "productionWranglerConfig": "wrangler.workers.new-account.jsonc",
+    "mediaWranglerConfig": "workers/r2-media-proxy/wrangler.jsonc",
+    "r2": {
+      "mediaBucket": "av-sarees-cdn",
+      "nextCacheBucket": "av-sarees-next-cache",
+      "s3Endpoint": ""
+    }
+  },
+  "vercel": {
+    "teamSlug": "av-sarees",
+    "projectSlug": "av-sarees",
+    "productionHost": "localhost:3000"
+  },
+  "github": {
+    "owner": "geethasarees15-ops",
+    "repo": "AV-Sarees",
+    "pushAccount": "geethasarees15-ops",
+    "htmlUrl": "https://github.com/geethasarees15-ops/AV-Sarees"
+  },
+  "upstash": {
+    "redisRestUrl": "",
+    "redisRestTokenSet": false
+  },
+  "resend": {
+    "fromEmail": "",
+    "domain": ""
+  },
+  "authRedirectOrigins": [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:3000"
+  ],
+  "template": {
+    "key": "priya",
+    "repo": "priyasareesonline-create/Priya-Sarees"
+  },
+  "forbidden": {
+    "description": "Never use these for this shop's deploys, R2, env, or wrangler login.",
+    "cloudflareAccountEmails": [
+      "thrycoproduct@gmail.com",
+      "shaarunew01@gmail.com",
+      "sripalanitextilesonline@gmail.com"
+    ],
+    "cloudflareAccountIds": [
+      "77dfa9b757691b2321fe0630f01c8c6a",
+      "542992b23690c0c07bb23e5fecffa6ec",
+      "17ae91583f8b6b109dbdc636bdf1511e"
+    ],
+    "supabaseProjectRefs": [
+      "azqgyxdzwlhdmjvkngbs",
+      "eouhtccprtggeftqiplm",
+      "xytdexahcdyhykvuwpys",
+      "rzwbpjjayarptlwjfpzm",
+      "qhtwwyqlsnckorndmhmt"
+    ],
+    "siteHosts": [
+      "thryco.com",
+      "www.thryco.com",
+      "media.thryco.com",
+      "hubsofcraftss.com",
+      "www.hubsofcraftss.com",
+      "velosoft.in",
+      "www.velosoft.in",
+      "agents.velosoft.in",
+      "ship.velosoft.in",
+      "autodm.velosoft.in",
+      "dashboard.velosoft.in"
+    ],
+    "r2Buckets": [
+      "thry-cdn",
+      "thry-next-cache",
+      "priya-sarees-cdn",
+      "priya-sarees-next-cache",
+      "hubofcraftss-cdn",
+      "hubofcraftss-next-cache"
+    ]
+  },
+  "notes": [
+    "AV Sarees is a NEW shop. Secrets stay in .env.local \u2014 never commit them.",
+    "Launch track: free (Priya / Vercel). No paid Cloudflare Workers path.",
+    "Run Ship validate agent before auth, R2, wrangler, or deploy work.",
+    "Bria: strip template identity \u2192 AV Sarees; address + logo + theme from logo.",
+    "Bria: strip template identity \u2192 AV Sarees; address + logo + theme from logo."
+  ],
+  "$schema": "./project.identity.schema.json",
+  "workspace": {
+    "localRoot": "E:\\AV Sarees",
+    "drive": "E:\\"
+  }
+}

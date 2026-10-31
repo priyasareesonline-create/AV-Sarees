@@ -1,0 +1,15 @@
+[
+  {
+    "id": "priya-sarees-admin-digital-upload",
+    "AllowedOrigins": [
+      "http://localhost:3000",
+      "http://127.0.0.1:3000",
+      "https://priya-sarees.priya-sarees.workers.dev",
+      "https://priya-sarees.vercel.app"
+    ],
+    "AllowedMethods": ["GET", "PUT", "HEAD"],
+    "AllowedHeaders": ["Content-Type", "Content-Length", "Authorization"],
+    "ExposeHeaders": ["ETag"],
+    "MaxAgeSeconds": 86400
+  }
+]

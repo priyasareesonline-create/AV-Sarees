@@ -1,0 +1,11 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "priya-sarees-shop-edge",
+  "account_id": "2294e12a37c66f58321581561fa758ee",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-14",
+  "workers_dev": true,
+  "observability": {
+    "enabled": true
+  }
+}
